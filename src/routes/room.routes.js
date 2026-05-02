@@ -5,11 +5,14 @@ import { asyncHandler } from "../utils/asynchandler.js"
 
 const router = express.Router()
 
+/*
+Create Room
+*/
 router.post(
-  "/signup",
+  "/",
   asyncHandler(async (req, res) => {
 
-    const response = await forwardRequest(req, services.authService)
+    const response = await forwardRequest(req, services.roomService)
 
     Object.entries(response.headers || {}).forEach(([key, value]) => {
       res.setHeader(key, value)
@@ -20,13 +23,14 @@ router.post(
   })
 )
 
-router.post(
-  "/login",
+/*
+Get Room
+*/
+router.get(
+  "/:roomId",
   asyncHandler(async (req, res) => {
 
-    console.log("reached---------->")
-
-    const response = await forwardRequest(req, services.authService)
+    const response = await forwardRequest(req, services.roomService)
 
     Object.entries(response.headers || {}).forEach(([key, value]) => {
       res.setHeader(key, value)
@@ -37,5 +41,22 @@ router.post(
   })
 )
 
+/*
+Invite Users
+*/
+router.post(
+  "/:roomId/invite",
+  asyncHandler(async (req, res) => {
+
+    const response = await forwardRequest(req, services.roomService)
+
+    Object.entries(response.headers || {}).forEach(([key, value]) => {
+      res.setHeader(key, value)
+    })
+
+    res.status(response.status).send(response.data)
+
+  })
+)
 
 export default router
